@@ -21,6 +21,10 @@ def click(event):
     elif text == 'C':
         scvalue.set("")
         screen.update()
+    elif text == 'del_last_entry':
+        e= screen.get()
+        screen.delete(len(e)-1)
+        screen.update()
     else:
         scvalue.set(scvalue.get() + text)
         screen.update()
@@ -105,6 +109,11 @@ b.bind('<Button-1>', click)
 f.pack()
 b = Button(f,text = '-' ,padx=15,pady=10, font=('lucida 20 bold'))
 b.pack(side='right',padx=18,pady=15)
+b.bind('<Button-1>', click)
+f.pack()
+f = Frame(root,bg='black')
+b = Button(f,text = 'del_last_entry' ,padx=25,pady=20, font=('lucida 20 bold'))
+b.pack(side='left',padx=13,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
 root.mainloop()

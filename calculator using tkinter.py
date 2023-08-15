@@ -4,7 +4,7 @@ from tkinter import *
 con= cn.connect(host='localhost', user='root', password='messiah10',database='calc_history')
 mycon = con.cursor()
 def sql_hist(k):
-    mycon.execute("insert into calc_hist(history) values({})".format(k))
+    mycon.execute("insert into calc_hist(history) values(round({}))".format(k))
     con.commit()
 
 def click(event):
@@ -21,15 +21,24 @@ def click(event):
     elif text == 'C':
         scvalue.set("")
         screen.update()
-    elif text == 'del_last_entry':
+    elif text == 'del':
         e= screen.get()
         screen.delete(len(e)-1)
+        screen.update()
+    elif text =='history':
+        query= " select round(history) from calc_hist where id = (select max(id) from calc_hist)"
+        mycon.execute(query)
+        myrec= mycon.fetchone()
+        print(myrec)
+        h= myrec[0]
+        print(h)
+        scvalue.set(h)
         screen.update()
     else:
         scvalue.set(scvalue.get() + text)
         screen.update()
 root = tk.Tk()
-root.geometry('520x650')
+root.geometry('520x750')
 root.title('CALCULATOR')
 root.configure(bg='red')
 scvalue= StringVar()
@@ -112,7 +121,11 @@ b.pack(side='right',padx=18,pady=15)
 b.bind('<Button-1>', click)
 f.pack()
 f = Frame(root,bg='black')
-b = Button(f,text = 'del_last_entry' ,padx=25,pady=20, font=('lucida 20 bold'))
+b = Button(f,text = 'del' ,padx=25,pady=20, font=('lucida 20 bold'))
+b.pack(side='left',padx=13,pady=20)
+b.bind('<Button-1>', click)
+f.pack()
+b = Button(f,text = 'history' ,padx=25,pady=20, font=('lucida 20 bold'))
 b.pack(side='left',padx=13,pady=20)
 b.bind('<Button-1>', click)
 f.pack()

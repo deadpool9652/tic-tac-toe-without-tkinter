@@ -1,5 +1,12 @@
+import mysql.connector as cn
 import tkinter as tk
 from tkinter import *
+con= cn.connect(host='localhost', user='root', password='messiah10',database='calc_history')
+mycon = con.cursor()
+def sql_hist(k):
+    mycon.execute("insert into calc_hist(history) values({})".format(k))
+    con.commit()
+
 def click(event):
     global scvalue
     text= event.widget.cget('text')
@@ -10,6 +17,7 @@ def click(event):
             value= eval(screen.get())
         scvalue.set(value)
         screen.update()
+        sql_hist(value)
     elif text == 'C':
         scvalue.set("")
         screen.update()
@@ -17,8 +25,9 @@ def click(event):
         scvalue.set(scvalue.get() + text)
         screen.update()
 root = tk.Tk()
-root.geometry('480x650')
+root.geometry('520x650')
 root.title('CALCULATOR')
+root.configure(bg='red')
 scvalue= StringVar()
 scvalue.set("")
 screen= Entry(root,textvar= scvalue, width='50',font=('lucida 35 bold'))
@@ -26,14 +35,14 @@ screen.pack(fill=X, ipadx=30,padx=20,pady=20)
 
 f = Frame(root,bg='black')
 b = Button(f,text = '1' ,padx=25,pady=20, font=('lucida 20 bold'))
+b.pack(side='left',padx=13,pady=20)
+b.bind('<Button-1>', click)
+f.pack()
+b = Button(f,text = '2' ,padx=25,pady=20 , font=('lucida 20 bold'),bg= 'yellow')
 b.pack(side='left',padx=18,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
-b = Button(f,text = '2' ,padx=25,pady=20 , font=('lucida 20 bold'))
-b.pack(side='left',padx=18,pady=20)
-b.bind('<Button-1>', click)
-f.pack()
-b = Button(f,text = '3' ,padx=25,pady=20, font=('lucida 20 bold'))
+b = Button(f,text = '3' ,padx=25,pady=20, font=('lucida 20 bold'),activebackground= 'yellow')
 b.pack(side='left',padx=18,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
@@ -42,9 +51,9 @@ b.pack(side='left',padx=18,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
 
-f = Frame(root,bg='dark grey')
+f = Frame(root,bg='black')
 b = Button(f,text = '4' ,padx=25,pady=20, font=('lucida 20 bold'))
-b.pack(side='left',padx=18,pady=20)
+b.pack(side='left',padx=15,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
 b = Button(f,text = '5',padx=25,pady=20, font=('lucida 20 bold'))
@@ -60,9 +69,9 @@ b.pack(side='left',padx=18,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
 
-f = Frame(root,bg='royal blue')
+f = Frame(root,bg='black')
 b = Button(f,text = '7' ,padx=25,pady=20 , font=('lucida 20 bold'))
-b.pack(side='left',padx=20,pady=20)
+b.pack(side='left',padx=19,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
 b = Button(f,text = '8',padx=25,pady=20, font=('lucida 20 bold'))
@@ -77,7 +86,7 @@ b = Button(f,text = '/',padx=25,pady=20, font=('lucida 20 bold'))
 b.pack(side='left',padx=18,pady=20)
 b.bind('<Button-1>', click)
 f.pack()
-f = Frame(root,bg='grey')
+f = Frame(root,bg='black')
 b = Button(f,text = '0' ,padx=26,pady=20, font=('lucida 20 bold'))
 b.pack(side='left',padx=18,pady=20)
 b.bind('<Button-1>', click)
@@ -95,11 +104,11 @@ b.pack(side='left',padx=12,pady=15)
 b.bind('<Button-1>', click)
 f.pack()
 b = Button(f,text = '-' ,padx=15,pady=10, font=('lucida 20 bold'))
-b.pack(side='right',padx=11,pady=15)
+b.pack(side='right',padx=18,pady=15)
 b.bind('<Button-1>', click)
 f.pack()
-
-
-
 root.mainloop()
 
+
+
+                
